@@ -1,0 +1,8 @@
+flask==1.0.2
+flask-cors==3.0.7
+requests>=2.21.0
+ibm-watson==4.7.1
+ibm-cloud-sdk-core==1.7.3
+markdown>=3.4.4
+python-dotenv>=0.21.1
+PyJWT>=1.7.1

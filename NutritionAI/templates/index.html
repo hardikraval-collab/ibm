@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nutrition Agentic AI — IBM Granite</title>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ─── HEADER ─────────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-icon">🥗</span>
+      <div class="logo-text">
+        <span class="logo-title">Nutrition Agentic AI</span>
+        <span class="logo-sub">Powered by IBM Granite &amp; watsonx.ai</span>
+      </div>
+    </div>
+    <nav class="nav-tabs">
+      <button class="nav-btn active" onclick="switchTab('plan')">📋 Generate Plan</button>
+      <button class="nav-btn" onclick="switchTab('chat')">💬 Ask AI</button>
+      <button class="nav-btn" onclick="switchTab('plans')">📁 My Plans</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ─── MAIN ────────────────────────────────────────────────────────────────── -->
+<main class="main">
+
+  <!-- ─── ETHICS BANNER ─────────────────────────────────────────────────── -->
+  <div class="ethics-banner">
+    <span class="ethics-icon">🛡️</span>
+    <div>
+      <strong>Ethical AI Commitment:</strong> This application follows IBM AI Ethics principles — 
+      Helpful, Accurate &amp; Honest, and Mindful (HAM). All advice is evidence-based and 
+      guardrail-protected. Always consult a healthcare professional for medical decisions.
+    </div>
+    <button class="ethics-close" onclick="this.parentElement.style.display='none'">✕</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TAB 1: GENERATE PLAN
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-plan" class="tab-content active">
+    <div class="two-col">
+
+      <!-- LEFT: User Profile Form -->
+      <div class="card form-card">
+        <div class="card-header">
+          <span class="card-icon">👤</span>
+          <h2>Your Profile</h2>
+          <span class="card-badge">Step 1</span>
+        </div>
+
+        <form id="profileForm" onsubmit="handleSubmit(event)">
+
+          <!-- Personal Info -->
+          <fieldset class="fieldset">
+            <legend>Personal Information</legend>
+            <div class="form-row">
+              <div class="field">
+                <label for="name">Full Name <span class="req">*</span></label>
+                <input type="text" id="name" placeholder="e.g., Aisha Khan" required maxlength="60" />
+              </div>
+              <div class="field">
+                <label for="age">Age <span class="req">*</span></label>
+                <input type="number" id="age" placeholder="e.g., 35" required min="1" max="120" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="weight">Weight (kg)</label>
+                <input type="number" id="weight" placeholder="e.g., 70" min="20" max="300" step="0.1" />
+              </div>
+              <div class="field">
+                <label for="height">Height (cm)</label>
+                <input type="number" id="height" placeholder="e.g., 165" min="50" max="250" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Diet Preferences -->
+          <fieldset class="fieldset">
+            <legend>Diet &amp; Lifestyle</legend>
+            <div class="form-row">
+              <div class="field">
+                <label for="diet_preference">Diet Preference <span class="req">*</span></label>
+                <select id="diet_preference" required>
+                  <option value="">— Select —</option>
+                  <option value="vegetarian">🥦 Vegetarian</option>
+                  <option value="vegan">🌱 Vegan</option>
+                  <option value="non-vegetarian">🍗 Non-Vegetarian</option>
+                  <option value="pescatarian">🐟 Pescatarian</option>
+                  <option value="flexitarian">🥗 Flexitarian</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="activity_level">Activity Level</label>
+                <select id="activity_level">
+                  <option value="Sedentary">🪑 Sedentary (office work)</option>
+                  <option value="Light">🚶 Light (1–2 days/week)</option>
+                  <option value="Moderate" selected>🏃 Moderate (3–5 days/week)</option>
+                  <option value="Active">🏋️ Active (6–7 days/week)</option>
+                  <option value="Very Active">⚡ Very Active (intense daily)</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="goal">Health Goal</label>
+              <select id="goal">
+                <option value="Maintain healthy weight">⚖️ Maintain healthy weight</option>
+                <option value="Lose weight (gradual, healthy)">📉 Lose weight (gradual, healthy)</option>
+                <option value="Gain muscle mass">💪 Gain muscle mass</option>
+                <option value="Improve energy levels">⚡ Improve energy levels</option>
+                <option value="Manage diabetes">🩺 Manage diabetes</option>
+                <option value="Lower blood pressure">❤️ Lower blood pressure</option>
+                <option value="Improve gut health">🦠 Improve gut health</option>
+                <option value="Boost immunity">🛡️ Boost immunity</option>
+              </select>
+            </div>
+          </fieldset>
+
+          <!-- Medical History -->
+          <fieldset class="fieldset">
+            <legend>Medical Information</legend>
+            <div class="field">
+              <label for="medical_history">Medical History</label>
+              <div class="checkbox-group">
+                <label><input type="checkbox" value="diabetes" onchange="updateMedical()"> Diabetes</label>
+                <label><input type="checkbox" value="blood pressure" onchange="updateMedical()"> Blood Pressure</label>
+                <label><input type="checkbox" value="thyroid disorder" onchange="updateMedical()"> Thyroid</label>
+                <label><input type="checkbox" value="heart disease" onchange="updateMedical()"> Heart Disease</label>
+                <label><input type="checkbox" value="kidney disease" onchange="updateMedical()"> Kidney Disease</label>
+                <label><input type="checkbox" value="PCOS" onchange="updateMedical()"> PCOS</label>
+                <label><input type="checkbox" value="celiac disease" onchange="updateMedical()"> Celiac Disease</label>
+                <label><input type="checkbox" value="None" id="chk-none" onchange="updateMedical(true)"> None of the above</label>
+              </div>
+              <input type="hidden" id="medical_history" value="None" />
+            </div>
+            <div class="field">
+              <label for="allergies">Food Allergies / Intolerances</label>
+              <input type="text" id="allergies" placeholder="e.g., peanuts, gluten, lactose" maxlength="200" />
+            </div>
+          </fieldset>
+
+          <!-- Location -->
+          <fieldset class="fieldset">
+            <legend>Location (for culturally relevant foods)</legend>
+            <div class="form-row">
+              <div class="field">
+                <label for="city">City</label>
+                <input type="text" id="city" placeholder="e.g., Mumbai" maxlength="60" />
+              </div>
+              <div class="field">
+                <label for="country">Country</label>
+                <input type="text" id="country" placeholder="e.g., India" maxlength="60" />
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- IBM Granite Config -->
+          <fieldset class="fieldset config-fieldset">
+            <legend>🔑 IBM watsonx.ai Configuration (Optional)</legend>
+            <p class="config-note">Leave blank to use the intelligent fallback AI. Enter your API key to use IBM Granite LLM.</p>
+            <div class="field">
+              <label for="api_key">watsonx.ai API Key</label>
+              <input type="password" id="api_key" placeholder="Enter your IBM Cloud API key" />
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="project_id">Project ID</label>
+                <input type="text" id="project_id" placeholder="Your watsonx project ID" />
+              </div>
+              <div class="field">
+                <label for="api_url">API URL</label>
+                <input type="text" id="api_url" placeholder="https://us-south.ml.cloud.ibm.com" />
+              </div>
+            </div>
+          </fieldset>
+
+          <div id="form-error" class="form-error" style="display:none"></div>
+
+          <button type="submit" class="btn-primary" id="submitBtn">
+            <span class="btn-icon">🤖</span>
+            Generate My Nutrition Plan
+          </button>
+        </form>
+      </div>
+
+      <!-- RIGHT: Plan Output -->
+      <div class="card output-card">
+        <div class="card-header">
+          <span class="card-icon">📄</span>
+          <h2>Your Nutrition Plan</h2>
+          <span class="card-badge" id="plan-source-badge">AI Ready</span>
+        </div>
+
+        <!-- Welcome State -->
+        <div id="welcome-state" class="welcome-state">
+          <div class="welcome-icon">🥗</div>
+          <h3>Ready to Transform Your Health?</h3>
+          <p>Fill in your profile on the left and our IBM Granite AI agent will generate a personalised 7-day nutrition plan tailored to your:</p>
+          <ul class="welcome-list">
+            <li>✅ Diet preferences &amp; food culture</li>
+            <li>✅ Medical conditions &amp; health goals</li>
+            <li>✅ Age, weight, and activity level</li>
+            <li>✅ Local food availability</li>
+          </ul>
+          <div class="agent-steps">
+            <h4>🤖 Agentic AI Pipeline</h4>
+            <div class="step"><span class="step-num">1</span> Collect &amp; Validate Profile</div>
+            <div class="step"><span class="step-num">2</span> Apply Ethical Guardrails</div>
+            <div class="step"><span class="step-num">3</span> IBM Granite Plans &amp; Reasons</div>
+            <div class="step"><span class="step-num">4</span> Output Screening &amp; HAM Check</div>
+            <div class="step"><span class="step-num">5</span> Save to Markdown File</div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="loading-state" style="display:none">
+          <div class="spinner"></div>
+          <h3>AI Agent Working...</h3>
+          <div class="agent-progress" id="agent-progress">
+            <div class="progress-step active" id="prog-1">📥 Collecting your profile...</div>
+            <div class="progress-step" id="prog-2">🛡️ Running ethical guardrails...</div>
+            <div class="progress-step" id="prog-3">🧠 IBM Granite reasoning...</div>
+            <div class="progress-step" id="prog-4">✍️ Generating nutrition plan...</div>
+            <div class="progress-step" id="prog-5">💾 Saving to .md file...</div>
+          </div>
+        </div>
+
+        <!-- Plan Output -->
+        <div id="plan-output" style="display:none">
+          <div class="plan-actions">
+            <button class="btn-secondary" onclick="downloadPlan()">💾 Download .md</button>
+            <button class="btn-secondary" onclick="printPlan()">🖨️ Print</button>
+            <button class="btn-secondary" onclick="copyPlan()">📋 Copy</button>
+            <button class="btn-danger" onclick="clearPlan()">🗑️ Clear</button>
+          </div>
+          <div id="plan-content" class="plan-content"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TAB 2: ASK AI (Q&A)
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-chat" class="tab-content">
+    <div class="chat-layout">
+      <div class="card chat-card">
+        <div class="card-header">
+          <span class="card-icon">💬</span>
+          <h2>Ask Nutrition AI</h2>
+          <span class="card-badge">IBM Granite</span>
+        </div>
+
+        <div class="quick-questions">
+          <p class="quick-label">Quick Questions:</p>
+          <button class="quick-btn" onclick="askQuick('How much protein do I need daily?')">Protein needs</button>
+          <button class="quick-btn" onclick="askQuick('What foods help control blood sugar?')">Blood sugar foods</button>
+          <button class="quick-btn" onclick="askQuick('Best foods for weight management?')">Weight management</button>
+          <button class="quick-btn" onclick="askQuick('How much water should I drink daily?')">Hydration guide</button>
+          <button class="quick-btn" onclick="askQuick('Which vitamins do vegetarians need?')">Vegetarian vitamins</button>
+          <button class="quick-btn" onclick="askQuick('Foods to avoid with high blood pressure?')">Blood pressure diet</button>
+        </div>
+
+        <div id="chat-messages" class="chat-messages">
+          <div class="chat-bubble ai-bubble">
+            <div class="bubble-avatar">🤖</div>
+            <div class="bubble-text">
+              Hello! I'm your IBM Granite-powered Nutrition AI assistant. 
+              Ask me anything about nutrition, diet, vitamins, meal planning, or managing 
+              health conditions through food. I'm here to help! 🥗
+              <br/><br/>
+              <em>Remember: I provide educational information. Always consult a healthcare professional for medical advice.</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-row">
+          <input type="text" id="chat-input" class="chat-input"
+            placeholder="Ask about nutrition, diet, vitamins, health conditions..."
+            onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendChat();}"
+            maxlength="500" />
+          <button class="btn-primary chat-send" onclick="sendChat()">Send ➤</button>
+        </div>
+        <div class="chat-disclaimer">
+          🛡️ AI Ethics Active | Guardrails Enabled | HAM Principles Applied
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════
+       TAB 3: MY PLANS
+  ══════════════════════════════════════════════════════════════════════════ -->
+  <div id="tab-plans" class="tab-content">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-icon">📁</span>
+        <h2>My Saved Nutrition Plans</h2>
+        <button class="btn-secondary small" onclick="loadPlans()">🔄 Refresh</button>
+      </div>
+      <div id="plans-list" class="plans-list">
+        <p class="empty-msg">Loading your saved plans...</p>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- ─── FOOTER ──────────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <strong>Nutrition Agentic AI</strong> — Built with IBM Granite &amp; watsonx.ai<br/>
+      <span class="footer-muted">Agentic AI SDLC | Ethical AI | HAM Principles</span>
+    </div>
+    <div class="footer-right">
+      <span class="footer-badge">🤖 IBM Granite</span>
+      <span class="footer-badge">🛡️ Guardrails Active</span>
+      <span class="footer-badge">⚕️ Medical Disclaimer Included</span>
+    </div>
+  </div>
+</footer>
+
+<script src="/static/js/app.js"></script>
+</body>
+</html>
